@@ -1,0 +1,4 @@
+---
+- include: roles/StackStorm.stackstorm/stackstorm.yml
+
+- include: keys.yml

@@ -1,0 +1,11 @@
+---
+- hosts: all
+
+  vars:
+    stackstorm_packs:
+      - name: "activedirectory"
+      - name: "menandmice"
+        repo: "https://github.com/StackStorm-Exchange/stackstorm-menandmice"
+
+  roles:
+    - role_under_test

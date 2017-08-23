@@ -1,0 +1,38 @@
+---
+- name: Install st2
+  hosts: test-stackstorm
+  roles:
+    - mongodb
+    - rabbitmq
+    - postgresql
+    - st2repo
+    - st2
+    - st2mistral
+    - nginx
+    - st2web
+    - nodejs
+    - st2chatops
+    - st2smoketests
+    - role: bwc
+      when: bwc_license is defined and bwc_license is not none
+    - role: bwc_smoketests
+      when: bwc_license is defined and bwc_license is not none
+  tasks:
+    - name: Create Keys directory
+      file:
+        path: "/etc/st2/keys/"
+        state: directory
+        owner: "st2"
+        group: "st2"
+        mode: 0770
+
+    - name: Generate Crypto Key
+      shell: "st2-generate-symmetric-crypto-key --key-path /etc/st2/keys/datastore_key.json"
+
+    - name: Add Key to file
+      lineinfile:
+        dest: "/etc/st2/st2.conf"
+        line: "\n[keyvalue]\nencryption_key_path = /etc/st2/keys/datastore_key.json"
+
+    - name: restart st2 service
+      shell: "st2ctl restart"

@@ -1,0 +1,34 @@
+---
+# Install Dependancies
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+# Add key value pairs to the key store
+- name: Add keys to the Key Value Store
+  include: keys.yml
+  with_items: '{{ stackstorm_keys }}'
+
+- name: Verify that git directory exists
+  file:
+    path: "{{ stackstorm_git_dest }}"
+    state: directory
+    mode: 0775
+
+# Install all Packs
+- name: Install Packs
+  include: packs_install.yml
+  with_items: '{{ stackstorm_packs }}'
+  when: item.nested is undefined or not item.nested
+
+- name: Install nested Packs
+  include: nested_packs_install.yml
+  with_items: '{{ stackstorm_packs }}'
+  when: item.nested is defined and item.nested
+
+- name: Remove Git Directory when finished
+  file:
+    path: "{{ stackstorm_git_dest }}"
+    state: absent

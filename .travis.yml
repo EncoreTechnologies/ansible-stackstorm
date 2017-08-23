@@ -1,0 +1,56 @@
+---
+services: docker
+
+env:
+  # tests/test-keys.yml
+  - distro: centos7
+    playbook: test-keys.yml
+    prefix: ''
+    http_port: 8080
+    test_idempotence: false
+  - distro: ubuntu1604
+    playbook: test-keys.yml
+    prefix: ''
+    http_port: 8080
+    test_idempotence: false
+  - distro: ubuntu1404
+    playbook: test-keys.yml
+    prefix: ''
+    http_port: 8080
+    test_idempotence: false
+
+  # tests/test-packs.yml
+  - distro: centos7
+    playbook: test-packs.yml
+    prefix: ''
+    http_port: 8080
+    test_idempotence: false
+  - distro: ubuntu1604
+    playbook: test-packs.yml
+    prefix: ''
+    http_port: 8080
+    test_idempotence: false
+  - distro: ubuntu1404
+    playbook: test-packs.yml
+    prefix: ''
+    http_port: 8080
+    test_idempotence: false
+
+script:
+  # Configure test script so we can run extra tests after playbook is run.
+  - export container_id=$(date +%s)
+  - export cleanup=false
+
+  # Download test shim.
+  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
+  - chmod +x ${PWD}/tests/test.sh
+
+  # Run tests.
+  - ${PWD}/tests/test.sh
+
+after_failure:
+  # Check what happened on systemd systems.
+  - 'docker exec --tty ${container_id} env TERM=xterm journalctl -xe --no-pager'
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

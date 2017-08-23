@@ -1,0 +1,14 @@
+---
+- hosts: all
+
+  vars:
+    stackstorm_keys:
+      - name: "test"
+        value: "Testing Keys"
+        encrypted: false
+      - name: "test2"
+        value: "Testing Encrypted Keys"
+        encrypted: true
+
+  roles:
+    - role_under_test
