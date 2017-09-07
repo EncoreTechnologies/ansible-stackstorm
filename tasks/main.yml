@@ -6,6 +6,9 @@
 - include: setup-Debian.yml
   when: ansible_os_family == 'Debian'
 
+- name: Check for encryption key
+  include: encryption.yml
+
 # Add key value pairs to the key store
 - name: Add keys to the Key Value Store
   include: keys.yml

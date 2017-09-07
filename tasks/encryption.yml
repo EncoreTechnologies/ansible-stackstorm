@@ -1,0 +1,33 @@
+---
+- name: "Checking Keys directory"
+  stat:
+    path: "{{ stackstorm_keys_dir }}"
+  register: folder_stats
+
+- name: Create Keys directory
+  file:
+    path: "{{ stackstorm_keys_dir }}"
+    state: directory
+    owner: "st2"
+    group: "st2"
+    mode: 0770
+  when: folder_stats.stat.exists == false
+
+- name: "Checking Crypto Key"
+  stat:
+   path: "{{ stackstorm_keys_dir }}{{ stackstorm_datastor_file }}"
+  register: key_stats
+
+- name: Generate Crypto Key
+  shell: "st2-generate-symmetric-crypto-key --key-path {{ stackstorm_keys_dir }}{{ stackstorm_datastor_file }}"
+  when: key_stats.stat.exists == false
+
+- name: Add Key to file
+  lineinfile:
+    dest: "{{ stackstorm_config }}"
+    line: "\n[keyvalue]\nencryption_key_path = {{ stackstorm_keys_dir }}{{ stackstorm_datastor_file }}"
+  when: key_stats.stat.exists == false
+
+- name: restart st2 service
+  shell: "st2ctl restart"
+  when: key_stats.stat.exists == false

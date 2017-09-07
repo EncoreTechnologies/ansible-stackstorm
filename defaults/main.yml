@@ -7,6 +7,9 @@
 # This is the default path where packs are deployed too.
 stackstorm_packs_dir: /opt/stackstorm/packs
 stackstorm_git_dest: /tmp/ansible-git
+stackstorm_config: /etc/st2/st2.conf
+stackstorm_keys_dir: /etc/st2/keys/
+stackstorm_datastor_file: datastore_key.json
 
 stackstorm_keys: []
 

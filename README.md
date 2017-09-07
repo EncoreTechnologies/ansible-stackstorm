@@ -20,6 +20,18 @@ Default space where packs are deployed to. If your environment has changed the d
 
 For nested packs that need to be cloned first then installed. They git repos will cloned to this location then deleted when finished installing the packs.
 
+    stackstorm_config: /etc/st2/st2.conf
+
+Default configuration file for stackstorm. This is needed to add the newly generated key value information to.
+
+    stackstorm_keys_dir: /etc/st2/keys/
+
+Default keys directory where cloudforms recommends that you put your datastore_key. This is not created by default so can easily be overridden to be moved if your environment calls for it.
+
+    stackstorm_datastor_file: datastore_key.json
+
+Default datastore file name that is reccommended by stackstorm. If this is not already created then it can be renamed easily depending on what your envrionment needs.
+
     stackstorm_keys:
       - name: "test"
         value: "test value"
