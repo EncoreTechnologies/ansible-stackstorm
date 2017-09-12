@@ -1,27 +1,27 @@
 ---
-- name: Remove Old Packs
+- name: "Removing Old {{ item.name }} pack"
   shell: "st2 pack remove {{ item.name }}"
 
-- name: Clone Git repo
+- name: "Clone Git repo"
   git:
     repo: "{{ item.repo }}"
     dest: "{{ stackstorm_git_dest }}/{{ item.name }}"
     accept_hostkey: yes
   when: item.username is undefined or item.username == ""
 
-- name: Copy Pack Data
+- name: "Copying {{ item.name }} pack data"
   shell: "cp -r {{ stackstorm_git_dest }}/{{ item.name }}/{{ item.src }} {{ stackstorm_packs_dir }}/{{ item.name }}"
 
-- name: Set Proper Permissions on directory
+- name: "Set Proper Permissions on directory"
   file:
     path: "{{ stackstorm_packs_dir }}"
     state: directory
     group: st2packs
     recurse: yes
 
-- name: Register Pack
+- name: "Registering {{ item.name }} pack"
   shell: "st2 pack register {{ stackstorm_packs_dir }}/{{ item.name }}"
 
-- name: Refresh Virtualenv
+- name: "Refresh {{ item.name }} pack Virtualenv"
   shell: "st2 run packs.setup_virtualenv update=true packs={{ item.name }}"
   when: item.refresh_virtual is defined and item.refresh_virtual
