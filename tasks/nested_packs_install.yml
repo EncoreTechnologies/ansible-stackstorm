@@ -7,10 +7,20 @@
     repo: "{{ item.repo }}"
     dest: "{{ stackstorm_git_dest }}/{{ item.name }}"
     accept_hostkey: yes
-  when: item.username is undefined or item.username == ""
+  when: item.repo is defined and (item.username is undefined or item.username == "")
 
 - name: "Copying {{ item.name }} pack data"
   shell: "cp -r {{ stackstorm_git_dest }}/{{ item.name }}/{{ item.src }} {{ stackstorm_packs_dir }}/{{ item.name }}"
+  when: item.repo is defined
+
+- name: "Copy Local {{ item.name }} Pack Data"
+  shell: "cp -r {{ item.local_dir }}/{{ item.src }} {{ stackstorm_packs_dir }}/{{ item.name }}"
+  when: item.local_dir is defined
+
+- name: "Checking for {{ item.name }} Pack"
+  stat:
+    path: "{{ stackstorm_packs_dir }}/{{ item.name }}"
+  register: pack_stats
 
 - name: "Set Proper Permissions on directory"
   file:
@@ -18,10 +28,12 @@
     state: directory
     group: st2packs
     recurse: yes
+  when: pack_stats.stat.exists == true
 
 - name: "Registering {{ item.name }} pack"
   shell: "st2 pack register {{ stackstorm_packs_dir }}/{{ item.name }}"
+  when: pack_stats.stat.exists == true
 
 - name: "Refresh {{ item.name }} pack Virtualenv"
   shell: "st2 run packs.setup_virtualenv update=true packs={{ item.name }}"
-  when: item.refresh_virtual is defined and item.refresh_virtual
+  when: pack_stats.stat.exists == true and (item.refresh_virtual is defined and item.refresh_virtual)
