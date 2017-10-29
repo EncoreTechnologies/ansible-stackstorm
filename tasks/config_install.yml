@@ -1,0 +1,24 @@
+---
+- name: "Get file"
+  set_fact: config_file="{{ item.file.split('/')[-1] }}"
+
+- name: "Checking for {{ config_file }} file"
+  stat:
+    path: "{{ stackstorm_configs_dir }}/{{ config_file }}"
+  register: file_stats
+
+- name: "Remove {{ config_file }} if it already exists"
+  file:
+    path: "{{ stackstorm_configs_dir }}/{{ config_file }}"
+    state: absent
+  when: file_stats.stat.exists == true
+
+- name: "Copy the remote {{ config_file }} to the proper location"
+  copy:
+    src: "{{ item.file }}"
+    dest: "{{ stackstorm_configs_dir }}/{{ config_file }}"
+  when: item.local is undefined or item.local == false
+
+- name: "Copy the local {{ config_file }} to the proper location"
+  shell: "cp {{ item.file }} {{ stackstorm_configs_dir }}/{{ config_file }}"
+  when: item.local is defined and item.local == true
