@@ -1,5 +1,5 @@
 ---
-- include: mongodb_rhel_dependencies.yaml
+- include_tasks: mongodb_rhel_dependencies.yaml
 
 - name: yum | Add mongodb key
   become: yes

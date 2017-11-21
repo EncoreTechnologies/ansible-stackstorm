@@ -1,6 +1,6 @@
 ---
 - name: Install mongodb on {{ ansible_distribution }}
-  include: mongodb_{{ ansible_pkg_mgr }}.yaml
+  include_tasks: mongodb_{{ ansible_pkg_mgr }}.yaml
   tags: [databases, mongodb]
 
 - name: Start & Enable mongodb

@@ -75,7 +75,7 @@
 
 - name: Configure mistral.conf settings
   # Ansible nested loop to iterate through a hash of hashes
-  include: config.yml _conf_section_name={{ _conf_section.key }} _conf_options={{ _conf_section.value }}
+  include_tasks: config.yml _conf_section_name={{ _conf_section.key }} _conf_options={{ _conf_section.value }}
   with_dict: "{{ st2mistral_config }}"
   loop_control:
     loop_var: _conf_section
