@@ -32,6 +32,10 @@ Default keys directory where cloudforms recommends that you put your datastore_k
 
 Default datastore file name that is reccommended by stackstorm. If this is not already created then it can be renamed easily depending on what your envrionment needs.
 
+    stackstorm_configs_dir: /opt/stackstorm/configs
+
+Default configs directory for stackstorm configs to live in.
+
     stackstorm_keys:
       - name: "test"
         value: "test value"
@@ -54,6 +58,13 @@ Stackstorm packs to be deployed. if repo does not exist, will look at stackstorm
         refresh_virtual: true
 
 If you have a git repository with several stackstorm packs the nested = true flag needs to be added. If that is added the repo will be cloned to the temp directory and packs installed from the local source. You must specifiy the source location from the pack.
+
+    stackstorm_configs:
+      - file: test/test_file.yaml
+        local: true
+        file: test2/test_file2.yaml
+
+Configs to be copied to the proper stackstorm location. These files can either be already on the stackstorm box by using local: true or they can be copied from a remote source by either specifying local: false or not specifying local at all.
 
 ## Dependencies
 
