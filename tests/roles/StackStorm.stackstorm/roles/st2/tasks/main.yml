@@ -43,21 +43,30 @@
   tags: st2
 
 - name: Create and configure StackStorm system user
-  include_tasks: user.yml
+  include: user.yml
   tags: st2, user
 
 - name: Configure StackStorm authentication
-  include_tasks: auth.yml
-  when: "{{ st2_config.auth.enable|default(st2_auth_enable) if st2_config.auth is defined else st2_auth_enable }}"
+  include: auth.yml
+  # Use st2_config.auth.enable setting if available, otherwise use st2_auth_enable
+  when: (st2_config.auth|default({})).enable|default(st2_auth_enable)
   tags: st2, auth
 
 - name: Configure StackStorm st2.conf settings
   # Ansible nested loop to iterate through a hash of hashes
-  include_tasks: config.yml _conf_section_name={{ _conf_section.key }} _conf_options={{ _conf_section.value }}
+  include: config.yml _conf_section_name={{ _conf_section.key }} _conf_options={{ _conf_section.value }}
   with_dict: "{{ st2_config }}"
   loop_control:
     loop_var: _conf_section
   tags: st2, config
+
+- name: Configure the StackStorm datastore
+  include: datastore.yml
+  tags: st2, datastore
+
+- name: Configure StackStorm to work via proxy
+  include: proxy.yml
+  tags: st2, proxy
 
 - name: Ensure StackStorm services are enabled and running
   become: yes
