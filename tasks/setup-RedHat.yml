@@ -7,5 +7,5 @@
       - git
       - python-devel
       - python2-pip
-      - ssh-pass
+      - sshpass
     state: installed

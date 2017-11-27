@@ -4,5 +4,5 @@
     name:
       - git
       - curl
-      - ssh-pass
+      - sshpass
     state: installed

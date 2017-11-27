@@ -78,21 +78,21 @@ fi
 
 if [ $distro = 'centos7' ]; then
   docker exec --tty $container_id env TERM=xterm yum update -y ansible
-  docker exec --tty $container_id env TERM=xterm yum install -y sshpass
+  #docker exec --tty $container_id env TERM=xterm yum install -y sshpass
 # CentOS 6
 elif [ $distro = 'centos6' ]; then
   docker exec --tty $container_id env TERM=xterm yum update -y ansible
-  docker exec --tty $container_id env TERM=xterm yum install -y sshpass
+  #docker exec --tty $container_id env TERM=xterm yum install -y sshpass
 elif [ $distro = 'ubuntu1604' ]; then
-  docker exec --tty $container_id env TERM=xterm apt-get install -y sshpass
+  #docker exec --tty $container_id env TERM=xterm apt-get install -y sshpass
 # Ubuntu 14.04
 elif [ $distro = 'ubuntu1404' ]; then
-  docker exec --tty $container_id env TERM=xterm apt-get install -y sshpass
+  #docker exec --tty $container_id env TERM=xterm apt-get install -y sshpass
 # Ubuntu 12.04
 elif [ $distro = 'ubuntu1204' ]; then
-  docker exec --tty $container_id env TERM=xterm apt-get install -y sshpass
+  #docker exec --tty $container_id env TERM=xterm apt-get install -y sshpass
 elif [ $distro = 'fedora24' ]; then
-  docker exec --tty $container_id env TERM=xterm dnf install -y sshpass
+  #docker exec --tty $container_id env TERM=xterm dnf install -y sshpass
 fi
 
 printf "\n"
