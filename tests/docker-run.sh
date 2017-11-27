@@ -76,8 +76,10 @@ if [ -f "$PWD/tests/requirements.yml" ]; then
   docker exec --tty $container_id env TERM=xterm ansible-galaxy install -r /etc/ansible/roles/role_under_test/tests/requirements.yml
 fi
 
-# Ensure ansible is at the latest version
-if [ $distro = 'centos7' || $distro = 'centos6' ]; then
+if [ $distro = 'centos7' ]; then
+  docker exec --tty $container_id env TERM=xterm yum update -y ansible
+# CentOS 6
+elif [ $distro = 'centos6' ]; then
   docker exec --tty $container_id env TERM=xterm yum update -y ansible
 fi
 
