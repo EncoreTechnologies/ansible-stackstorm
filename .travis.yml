@@ -42,10 +42,10 @@ script:
   - export cleanup=false
 
   # Download test shim.
-  - chmod +x ${PWD}/tests/test.sh
+  - chmod +x ${PWD}/tests/docker-run.sh
 
   # Run tests.
-  - ${PWD}/tests/test.sh
+  - ${PWD}/tests/docker-run.sh
 
 after_failure:
   # Check what happened on systemd systems.
