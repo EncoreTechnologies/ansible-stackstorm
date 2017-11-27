@@ -1,17 +1,17 @@
 ---
 # Install Dependancies
-- include: setup-RedHat.yml
+- include_tasks: setup-RedHat.yml
   when: ansible_os_family == 'RedHat'
 
-- include: setup-Debian.yml
+- include_tasks: setup-Debian.yml
   when: ansible_os_family == 'Debian'
 
 - name: Check for encryption key
-  include: encryption.yml
+  include_tasks: encryption.yml
 
 # Add key value pairs to the key store
 - name: Add keys to the Key Value Store
-  include: keys.yml
+  include_tasks: keys.yml
   with_items: '{{ stackstorm_keys }}'
 
 - name: Verify that git directory exists
@@ -22,12 +22,12 @@
 
 # Install all Packs
 - name: Install Packs
-  include: packs_install.yml
+  include_tasks: packs_install.yml
   with_items: '{{ stackstorm_packs }}'
   when: item.nested is undefined or not item.nested
 
 - name: Install nested Packs
-  include: nested_packs_install.yml
+  include_tasks: nested_packs_install.yml
   with_items: '{{ stackstorm_packs }}'
   when: item.nested is defined and item.nested
 
@@ -35,3 +35,10 @@
   file:
     path: "{{ stackstorm_git_dest }}"
     state: absent
+
+- name: Copy configs to the correct folder
+  include: config_install.yml
+  with_items: '{{ stackstorm_configs }}'
+
+- name: "Reload Configs"
+  shell: "st2ctl reload --register-configs"

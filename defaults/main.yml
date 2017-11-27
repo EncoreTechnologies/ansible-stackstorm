@@ -10,7 +10,11 @@ stackstorm_git_dest: /tmp/ansible-git
 stackstorm_config: /etc/st2/st2.conf
 stackstorm_keys_dir: /etc/st2/keys/
 stackstorm_datastor_file: datastore_key.json
+stackstorm_configs_dir: /opt/stackstorm/configs
 
 stackstorm_keys: []
 
 stackstorm_packs: []
+
+# A List of file paths to be copied
+stackstorm_configs: []

@@ -1,10 +1,10 @@
 ---
 # Some Keys do not need to be encrypted and can just be base values
-- name: Set Key Value Pairs
+- name: "Set Key Value pair for {{ item.name }}"
   shell: "st2 key set {{ item.name }} '{{ item.value }}'"
   when: item.encrypted is undefined or not item.encrypted
 
 # Added the Encrypted flag to store as an encrypted value
-- name: Set Encrypted Key Value Pairs
+- name: "Set Encrypted Key Value pair for {{ item.name }}"
   shell: "st2 key set {{ item.name }} '{{ item.value }}' -e"
   when: item.encrypted is defined and item.encrypted

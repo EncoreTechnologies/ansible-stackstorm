@@ -1,4 +1,4 @@
 ---
-- include: roles/StackStorm.stackstorm/stackstorm.yml
+- import_playbook: roles/StackStorm.stackstorm/stackstorm.yml
 
-- include: packs.yml
+- import_playbook: packs.yml

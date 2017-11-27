@@ -1,11 +1,11 @@
 ---
-- name: Remove Old Pack
+- name: "Removing Old {{ item.name }} pack"
   shell: "st2 pack remove {{ item.name }}"
 
-- name: Install Pack From Stackstorm Exchange
+- name: "Installing {{ item.name }} pack from Stackstorm Exchange"
   shell: "st2 pack install {{ item.name }}"
   when: item.repo is undefined or item.repo == ""
 
-- name: Install Pack From Git
+- name: "Installing {{ item.name }} pack from Git"
   shell: "st2 pack install {{ item.repo }}"
   when: item.repo is defined and item.repo != ""
